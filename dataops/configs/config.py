@@ -1,34 +1,42 @@
-from .base_config import BASE_CONFIG
-from .aws_config import AWS_CONFIG
-from .gcloud_config import GCLOUD_CONFIG
-from .sql_config import SQL_CONFIG
-from .redis_config import REDIS_CONFIG
+import json
 
 
-class CONFIG(BASE_CONFIG):
-	def __init__(self, config_name, config_file):
+class OBJ_DICT(dict):
+	def __init__(self, *args, **kwargs):
+		super(OBJ_DICT, self).__init__(*args, **kwargs)
+		for arg in args:
+			if isinstance(arg, dict):
+				for k, v in arg.items():
+					self[k] = v
+		if kwargs:
+			for k, v in kwargs.items():
+				self[k] = v
 
-		self.config_name = config_name
+	def __getattr__(self, attr):
+		return self.get(attr)
 
-		config_name_to_class_map = {
-			'aws': AWS_CONFIG,
-			'gcloud': GCLOUD_CONFIG,
-			'sql': SQL_CONFIG,
-			'redis': REDIS_CONFIG
-		}
+	def __setattr__(self, key, value):
+		self.__setitem__(key, value)
 
-		super(CONFIG, self).__init__(config_file)
+	def __setitem__(self, key, value):
+		super(OBJ_DICT, self).__setitem__(key, value)
+		self.__dict__.update({key: value})
 
-		self.config_dict = config_name_to_class_map[config_name]
+	def __delattr__(self, item):
+		self.__delitem__(item)
 
-		self.validate_keys()
+	def __delitem__(self, key):
+		super(OBJ_DICT, self).__delitem__(key)
+		del self.__dict__[key]
 
-	def validate_keys(self):
-		for k in self.config_dict.keys():
-			if k not in self.keys():
-				raise Exception('Missing Key : {}'.format(k))
-			else:
-				if not self[k]:
-					raise Exception('Empty Value For Key : {}'.format(k))
 
-		self.__delitem__('config_dict')
+class CONFIG(OBJ_DICT):
+	def __init__(self, config_file, **kwargs):
+
+		with open(config_file) as f:
+			config = json.load(f)
+
+		for key, val in kwargs.items():
+			config[key] = val
+
+		super(CONFIG, self).__init__(config)

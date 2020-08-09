@@ -1,1 +1,0 @@
-GCLOUD_CONFIG = {}

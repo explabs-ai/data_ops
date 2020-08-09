@@ -1,0 +1,14 @@
+{
+    "CONNECTION_TYPE": "",
+    "AUTH": {
+        "KEYS": [],
+        "REGION": "",
+        "USERNAME": "",
+        "PASSWORD": "",
+        "ENDPOINT": ""
+    },
+    "DATA": {
+        "STORE_NAME": "",
+        "SUBSTORE_NAME": ""
+    }
+}
