@@ -37,8 +37,10 @@ class DATABASE():
         cursor = connection.cursor()
         return connection, cursor
 
+
     def close_connection(self, connection):
         connection.close()
+
 
     def convert_types(self, params, query, schema):
         params = list(params)
@@ -52,11 +54,9 @@ class DATABASE():
 
         return params
 
-    def generate_schemas(self, db):
-        # Create The JSON Schemas For All The Tables In The Database
-        return
 
-    def create_schema(self, schema):
+    def create_schemas(self, db):
+        # Create The JSON Schemas For All The Tables In The Database
         return
 
     def create_table(self, schema):

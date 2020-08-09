@@ -52,11 +52,8 @@ class DATABASE():
 
         return params
 
-    def generate_schemas(self, db):
+    def create_schemas(self, db):
         # Create The JSON Schemas For All The Tables In The Database
-        return
-
-    def create_schema(self, schema):
         return
 
     def create_table(self, schema):
